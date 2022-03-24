@@ -20,10 +20,12 @@ namespace Codurance.FunctionAPI
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            NumberRequest data = JsonConvert.DeserializeObject<NumberRequest>(requestBody); 
 
             Guid responseMessage = Guid.NewGuid();
-               
+            log.LogInformation("GUID generated");
+            log.LogInformation(data.number.ToString());
+
             return new OkObjectResult(responseMessage);
         }
     }
