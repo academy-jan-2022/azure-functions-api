@@ -13,8 +13,10 @@ namespace Codurance.FunctionAPI
     public static class GenerateGUID
     {
         [FunctionName("GenerateGUID")]
+        
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [Queue("api"),StorageAccount("AzureWebJobsStorage")] ICollector<string> msg,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -25,6 +27,7 @@ namespace Codurance.FunctionAPI
             Guid responseMessage = Guid.NewGuid();
             log.LogInformation("GUID generated");
             log.LogInformation(data.number.ToString());
+            msg.Add(data.number.ToString());
 
             return new OkObjectResult(responseMessage);
         }
