@@ -16,20 +16,22 @@ namespace Codurance.FunctionAPI
         
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            [Queue("api"),StorageAccount("AzureWebJobsStorage")] ICollector<string> msg,
+            [Queue("banana"),StorageAccount("AzureWebJobsStorage")] ICollector<string> msg,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             NumberRequest data = JsonConvert.DeserializeObject<NumberRequest>(requestBody); 
-
-            Guid responseMessage = Guid.NewGuid();
+            
+            Guid guid = Guid.NewGuid();
             log.LogInformation("GUID generated");
             log.LogInformation(data.number.ToString());
-            msg.Add(data.number.ToString());
+            NumberResponse response = new NumberResponse(data.number, guid);
+           
+            msg.Add(JsonConvert.SerializeObject(response));
 
-            return new OkObjectResult(responseMessage);
+            return new OkObjectResult(guid);
         }
     }
 }
