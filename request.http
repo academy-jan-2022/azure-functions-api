@@ -1,0 +1,11 @@
+GET http://localhost:7071/api/GetFile/3e134be4-1ffe-4e1f-841a-b0e922936607 HTTP/1.1
+
+###
+
+POST http://localhost:7071/api/GetFile HTTP/1.1
+content-type: application/json
+
+{
+    "id": "e9142f24-331a-46f6-a952-844b8d348fb7"
+}
+

@@ -1,11 +1,11 @@
 using System;
 
-public struct NumberResponse
+public struct NumberMessage
 {
     public int Number;
     public Guid GUID;
 
-    public NumberResponse(int number, Guid GUID) {
+    public NumberMessage(int number, Guid GUID) {
         this.Number = number;
         this.GUID = GUID;
 
