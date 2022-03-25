@@ -18,7 +18,7 @@ namespace Codurance.FunctionAPI
         [FunctionName("GenerateGUID")]
         
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             [Queue("banana"),StorageAccount("AzureWebJobsStorage")] ICollector<string> msg,
             ILogger log)
         {
@@ -37,23 +37,5 @@ namespace Codurance.FunctionAPI
             return new OkObjectResult(guid);
         }
 
-
-        [FunctionName("GetFile")]
-        public static async Task<IActionResult> Run2(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetFile/{id:Guid}")] HttpRequest req,
-            Guid id,
-            ILogger log){
-            string connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
-
-            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("files");
-
-            string fileName = $"{id}" + ".txt";
-            BlobClient blobClient = containerClient.GetBlobClient(fileName);
-
-            BlobDownloadResult download = await blobClient.DownloadContentAsync();
-
-            return new OkObjectResult(download.Content.ToString());
-        }
     }
 }
